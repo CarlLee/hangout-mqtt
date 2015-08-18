@@ -1,0 +1,17 @@
+<ion-view view-title="消息列表">
+  <ion-content delegate-handle="msg-list">
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="msg in msgs" type="item-text-wrap">
+        <img ng-src="{{msg.face}}">
+        <h2>{{msg.name}}</h2>
+        <p>{{msg.msg}}</p>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+  <ion-footer-bar class="bar-positive">
+    <form ng-submit="sendMessage()" style="width: 100%;">
+    <input ng-model="jfk" type="checkbox" style="width:20px; height: 20px; vertical-align: middle; margin: 0 5px;">
+    <input ng-model="messageToSend" placeholder="输入聊天内容" type="text" style="display:inline-block; width: 90%; padding: 0 5px;  border: 1px solid #0c63ee; vertical-align: middle;">
+    </form>
+  </ion-footer-bar>
+</ion-view>
