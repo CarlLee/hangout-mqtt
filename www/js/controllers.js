@@ -17,7 +17,7 @@ angular.module('starter.controllers', ['ionic'])
   $scope.jfk = false;
   $scope.sendMessage = function(){
     var msg = $scope.jfk ? {
-      face: 'http://img1.imgtn.bdimg.com/it/u=2189033257,1229894232&fm=21&gp=0.jpg',
+      face: 'http://www.theyeshivaworld.com/wp-content/uploads/2013/11/JFK.jpg',
       name: 'JFK'
     } : {
       face: 'http://file.gucn.com/file/CurioPicfile/Gucn_23438_200812210285297CheckCurioPic2.jpg',
