@@ -1,7 +1,7 @@
 angular.module('starter.services', [])
 
 .factory('mqttClient', function(){
-  var client = mqtt.connect("ws://192.168.199.161:3000"); 
+  var client = mqtt.connect("wss://hangout-carllee.c9.io"); 
   return client;
 })
 .factory('storage', function(){
