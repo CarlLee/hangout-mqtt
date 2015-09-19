@@ -1,11 +1,14 @@
-<ion-view view-title="望京SOHO">
+<ion-view view-title="{{title}}">
+  <ion-nav-buttons side="right">
+    <button class="button button-icon ion-more" ng-click="openPopover($event)"></button>
+  </ion-nav-buttons>
   <ion-content delegate-handle="msg-list">
     <ion-list>
       <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="msg in msgs" type="item-text-wrap">
         <img ng-src="{{msg.face}}">
         <h2>{{msg.nickname}}</h2>
         <p ng-if="msg.type == 'text'">{{msg.msg}}</p>
-        <p ng-if="msg.type == 'image'"><img class="chat-image" ng-src="{{msg.image}}"/></p>
+        <p ng-if="msg.type == 'image_header'"><img class="chat-image" ng-src="{{images[msg['image_id']]}}"/></p>
       </ion-item>
     </ion-list>
   </ion-content>
