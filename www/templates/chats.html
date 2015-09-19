@@ -1,0 +1,20 @@
+<ion-view view-title="望京SOHO">
+  <ion-content delegate-handle="msg-list">
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="msg in msgs" type="item-text-wrap">
+        <img ng-src="{{msg.face}}">
+        <h2>{{msg.nickname}}</h2>
+        <p ng-if="msg.type == 'text'">{{msg.msg}}</p>
+        <p ng-if="msg.type == 'image'"><img class="chat-image" ng-src="{{msg.image}}"/></p>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+  <ion-footer-bar class="bar-positive">
+    <form ng-submit="sendMessage()" style="width: 100%;">
+    <input ng-model="messageToSend" placeholder="输入聊天内容" type="text" class="chat-input"/>
+    <button ng-hide="messageToSend.length == 0" class="button button-balanced icon ion-android-send chat-send"></button>
+    <button ng-hide="messageToSend.length != 0" ng-click="pickImage()" class="button button-balanced icon ion-image chat-send"></button>
+    <input id="imageFile" custom-on-change="sendImage" type="file" style="display: none;"/>
+    </form>
+  </ion-footer-bar>
+</ion-view>

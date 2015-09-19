@@ -21,3 +21,20 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
+.chat-input {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    vertical-align: middle;
+    width: 85%;
+    display: inline-block !important;
+}
+
+.chat-send {
+    width: 13%;
+    vertical-align: middle;
+}
+
+.chat-image {
+    width: 100%;
+    padding: 10px;
+}

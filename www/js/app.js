@@ -32,15 +32,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   $stateProvider
   .state('chats', {
     url: '/chats',
-    templateUrl: 'templates/tab-chats.html',
+    templateUrl: 'templates/chats.html',
     controller: 'ChatsCtrl'
-  });
-  
-  $stateProvider
+  })
   .state('lg', {
     url: '/lg',
     templateUrl: 'templates/login.html',
     controller: 'LgCtrl'
+  })
+  .state('map', {
+    url: '/map',
+    templateUrl: 'templates/map.html',
+    controller: 'MapCtrl'
   });
 
   // if none of the above states are matched, use this as the fallback
