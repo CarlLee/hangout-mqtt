@@ -2,15 +2,14 @@ angular.module('starter.controllers', ['ionic'])
 
 .controller('ChatsCtrl', function($scope, $ionicScrollDelegate, $ionicPopup,
     rfc4122, mqttClient, storage) {
-  var uuid = rfc4122.v4();
-  console.log(uuid);
   $scope.msgs = [];
+  $scope.images = {};
   mqttClient.subscribe("chat");
   mqttClient.on("message", function(topic, payload){
     var msg = JSON.parse(payload);
     var msgType = msg['type'];
-    var imageId = msg['image_id'];
-    if(msgtype == "image" && imageId != undefined){
+    var image = msg['image'];
+    if(msgType == "image" && image != undefined){
       return;
     }
     console.log(topic + ": " + payload);
@@ -21,13 +20,6 @@ angular.module('starter.controllers', ['ionic'])
   });
   $scope.messageToSend = "";
   $scope.sendMessage = function(){
-    // var msg = $scope.jfk ? {
-    //   face: 'http://www.theyeshivaworld.com/wp-content/uploads/2013/11/JFK.jpg',
-    //   name: 'JFK'
-    // } : {
-    //   face: 'http://file.gucn.com/file/CurioPicfile/Gucn_23438_200812210285297CheckCurioPic2.jpg',
-    //   name: '毛主席'
-    // };
     if($scope.messageToSend.length == 0){
       return;
     }
@@ -74,10 +66,11 @@ angular.module('starter.controllers', ['ionic'])
 .controller('ChatDetailCtrl', function($scope, $stateParams, storage) {
   $scope.msg = storage[$stateParams.chatId];
 })
-.controller('MapCtrl', function($scope, $ionicLoading, $compile) {
-      function initialize() {
-        var myLatlng = new google.maps.LatLng(43,-89.381388);
-        
+.controller('MapCtrl', function($scope, $ionicLoading, $compile, $state) {
+    //    debugger;
+  //    function initialize() {      //
+
+        var myLatlng = new google.maps.LatLng(39.994669099999996,116.4747621);
         var mapOptions = {
           center: myLatlng,
           zoom: 16,
@@ -86,7 +79,7 @@ angular.module('starter.controllers', ['ionic'])
         var map = new google.maps.Map(document.getElementById("map"),
             mapOptions);
         
-        var contentString = "<div><a ng-click='clickTest()'>Click me!</a></div>";
+        var contentString = "<div><a ng-click='clickTest()'>进入聊天室!</a></div>";
         var compiled = $compile(contentString)($scope);
 
         var infowindow = new google.maps.InfoWindow({
@@ -104,8 +97,8 @@ angular.module('starter.controllers', ['ionic'])
         });
 
         $scope.map = map;
-      }
-      google.maps.event.addDomListener(window, 'load', initialize);
+      //}
+  //    google.maps.event.addDomListener(window, 'load', initialize);
       
       $scope.centerOnMe = function() {
         if(!$scope.map) {
@@ -119,6 +112,7 @@ angular.module('starter.controllers', ['ionic'])
 
         navigator.geolocation.getCurrentPosition(function(pos) {
           $scope.map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+        //  debugger;
           $scope.loading.hide();
         }, function(error) {
           alert('Unable to get location: ' + error.message);
@@ -126,18 +120,17 @@ angular.module('starter.controllers', ['ionic'])
       };
       
       $scope.clickTest = function() {
-        alert('Example of infowindow with ng-click')
+      $state.go('chats');
       };
       
     })
 
 .controller('LgCtrl', function($scope, $state) {
-  
-  $scope.signIn = function(user) {
+    $scope.signIn = function(user) {
     console.log('Sign-In', user);
     localStorage['face']='/img/avatars_0'+Math.floor(9*Math.random()+1)+'.png';
     localStorage['nickname']=user.username;
-    $state.go('chats');
+    $state.go('map');
   };
   
 });
