@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.ionicframework.mqtt233201" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>mqtt</name>
+  <name>Hangout</name>
   <description>
-        An Ionic Framework and Cordova project.
-    </description>
-  <author email="hi@ionicframework" href="http://ionicframework.com/">
-      Ionic Framework Team
-    </author>
+        一个基于地理位置的聊天室服务
+  </description>
+  <author email="ljbha007@gmail.com">
+    Carl Lee
+  </author>
   <content src="index.html"/>
   <allow-navigation href="http://*/*" />
   <access origin="*"/>
@@ -17,6 +17,7 @@
   <preference name="BackupWebStorage" value="none"/>
   <preference name="SplashScreen" value="screen"/>
   <preference name="SplashScreenDelay" value="3000"/>
+  <preference name="StatusBarStyle" value="lightcontent" />
   <feature name="StatusBar">
     <param name="ios-package" value="CDVStatusBar" onload="true"/>
   </feature>
