@@ -217,7 +217,7 @@ angular.module('starter.controllers', ['ionic'])
     }
   });
   $scope.centerOnMe = function() {
-    if(!$scope.map) {
+    if(!map) {
       return;
     }
 
@@ -227,6 +227,7 @@ angular.module('starter.controllers', ['ionic'])
     });
 
     navigator.geolocation.getCurrentPosition(function(pos) {
+      map.panTo([pos.coords.latitude, pos.coords.longitude]);
       // $scope.map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
     //  debugger;
       $ionicLoading.hide();
