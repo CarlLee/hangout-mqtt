@@ -7718,3 +7718,11 @@ a.button {
 #map {
   height: 100%;
   margin-top: 45px; }
+
+.logo-wrapper {
+  text-align: center; }
+
+.logo {
+  width: 170px;
+  margin: 30px auto;
+  opacity: 0.7; }
