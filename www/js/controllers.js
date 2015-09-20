@@ -26,12 +26,16 @@ angular.module('starter.controllers', ['ionic'])
       ]
     },
   };
-  var defaultChannel = 'general';
+  var defaultChannel = {
+    name: '#综合',
+    channel: 'general'
+  }
   var poi = storage['selected_poi'] || defaultPoi;
   var placeId = poi._id;
   var placeTopic = "/places/" + placeId + "/";
-  var topic = placeTopic + defaultChannel;
-  $scope.title = getName(poi.names);
+  var placeName = getName(poi.names);
+  var topic = placeTopic + defaultChannel.channel;
+  $scope.title = placeName + defaultChannel.name;
   $scope.msgs = [];
   $scope.images = {};
   $scope.channels = [
@@ -90,12 +94,10 @@ angular.module('starter.controllers', ['ionic'])
   };
   $scope.pickImage = function(){
     $('#imageFile').trigger('click');
-    $ionicLoading.show();
   }
   $scope.sendImage = function(e){
     e.preventDefault();
     e.stopPropagation();
-    $ionicLoading.hide();
     var input = $('#imageFile')[0];
     var file = input.files[0];
     var msg = {};
@@ -110,9 +112,11 @@ angular.module('starter.controllers', ['ionic'])
     
     console.log("sending image_header..");
     mqttClient.publish(topic, JSON.stringify(msg));
+    $ionicLoading.show();
     var reader = new FileReader();
     reader.onload = function(e){
       var msg = {};
+      $ionicLoading.hide();
       msg['image_id'] = imageId;
       msg['image'] = e.target.result;
       msg['type'] = 'image';
@@ -134,8 +138,9 @@ angular.module('starter.controllers', ['ionic'])
   };
   $scope.changeChannel = function(newChannel){
     $scope.msgs.splice(0, $scope.msgs.length);
+    $scope.title = placeName + newChannel.name;
     mqttClient.unsubscribe(topic);
-    topic = placeTopic + newChannel;
+    topic = placeTopic + newChannel.channel;
     mqttClient.subscribe(topic);
   }
   $scope.changeChannelAndClose = function(newChannel){
@@ -148,9 +153,7 @@ angular.module('starter.controllers', ['ionic'])
   $scope.msg = storage[$stateParams.chatId];
 })
 .controller('MapCtrl', function($scope, $ionicLoading, $state, restService, storage) {
-  var infowindows = [];
-  function gotoChat(e){
-    var poi = e.target.poi;
+  function gotoChat(poi){
     console.log("gotoChat: ", poi);
     $state.go('chats');
     storage['selected_poi'] = poi;
@@ -162,57 +165,57 @@ angular.module('starter.controllers', ['ionic'])
       return names.name;
     }
   }
-  function makeMarker(poi){
-    var latLng = poi.loc.coordinates;
+  function convertToGeoJSON(poi){
     var name = getName(poi.names);
-    var latLng = new google.maps.LatLng(latLng[1], latLng[0]);
-    
-    var contentDiv = document.createElement('div');
-    contentDiv.poi = poi;
-    contentDiv.innerHTML = name;
-    $(contentDiv).click(gotoChat);
-  
-    var infowindow = new google.maps.InfoWindow({
-      content: contentDiv
-    });
-    infowindows.push(infowindow);
-  
-    var marker = new google.maps.Marker({
-      position: latLng,
-      map: map,
-      title: name
-    });
-  
-    google.maps.event.addListener(marker, 'click', function(){
-      infowindows.forEach(function(infoW){
-        infoW.close();
-      });
-      infowindow.open(map,marker);
-    });
+    return {
+      type: "Feature",
+      geometry: poi.loc,
+      properties: {
+        title: name,
+        description: "点击进入" + name + "区域聊天室",
+        "marker-color": "#3bb2d0",
+        "marker-symbol": "city",
+        "marker-size": "medium"
+      }
+    }
   }
+  
+  L.mapbox.accessToken = 'pk.eyJ1IjoibGpiaGEwMDciLCJhIjoiOG12c29RQSJ9.mH0nivAshxtDQo74VsX0_Q';
+  var map = L.mapbox.map('map', 'mapbox.streets')
+      .setView([39.994669099999996, 116.4747621], 14);
+  // var layer = L.mapbox.featureLayer().addTo(map);
+  
   restService.nearPlaces({
     lat: 39.994669099999996,
     lng: 116.4747621
   }, function(res){
-    console.log(res);
     var pois = res.data;
     if(pois != undefined){
-      pois.forEach(makeMarker);
+      var geoJSON = []
+      pois.forEach(function(poi){
+        // var json = convertToGeoJSON(poi);
+        // geoJSON.push(json);
+        var coords = poi.loc.coordinates;
+        var name = getName(poi.names);
+        var node = document.createElement('div');
+        node.innerHTML = "<h2>" + name + "</h2><p>点击进入" + name + "区域聊天室</p>";
+        $(node).click(function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          gotoChat(poi);
+        });
+        var marker = L.marker([coords[1], coords[0]], {
+          icon: L.mapbox.marker.icon({
+            'marker-color': '#9c89cc',
+            'marker-symbol': 'city'
+          })
+        })
+        .bindPopup(node)
+        .addTo(map);
+      });
+      // layer.setGeoJSON(geoJSON);
     }
   });
-
-  var latLng = new google.maps.LatLng(39.994669099999996, 116.4747621);
-  var mapOptions = {
-    center: latLng,
-    zoom: 14,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-  };
-  var map = new google.maps.Map(document.getElementById("map"),
-    mapOptions);
-  $scope.map = map;
-  //}
-//    google.maps.event.addDomListener(window, 'load', initialize);
-  
   $scope.centerOnMe = function() {
     if(!$scope.map) {
       return;
@@ -224,7 +227,7 @@ angular.module('starter.controllers', ['ionic'])
     });
 
     navigator.geolocation.getCurrentPosition(function(pos) {
-      $scope.map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+      // $scope.map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
     //  debugger;
       $ionicLoading.hide();
     }, function(error) {
