@@ -63,7 +63,7 @@ angular.module('starter.controllers', ['ionic'])
     var msgType = msg['type'];
     var imageId = msg['image_id'];
     // debugger;
-    $scope.images[imageId] = "/img/placeholder.png";
+    $scope.images[imageId] = "img/placeholder.png";
     if(msgType == "image"){
       var image = msg['image'];
       $scope.$apply(function(){
