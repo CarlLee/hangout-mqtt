@@ -1,26 +1,25 @@
-
-<ion-view view-title="Sign-In">
+<ion-view view-title="登录">
   <ion-content>
     <div class="list">
       <label class="item item-input">
-        <span class="input-label">Login</spanw>
+        <span class="input-label">登录</spanw>
       </label>
       <label class="item item-input">
-        <span class="input-label">Username</span>
+        <span class="input-label">用户名</span>
         <input type="text" ng-model="user.username">
       </label>
       <label class="item item-input">
-        <span class="input-label">Password</span>
+        <span class="input-label">密码</span>
         <input type="password" ng-model="user.password">
       </label>
     </div>
     <div class="padding">
       <button class="button button-block button-positive" ng-click="signIn(user)">
-        Sign-In
-      </button>
+        登录
+      </button><!-- 
       <p class="text-center">
-        <a href="#/forgot-password">Forgot password</a>
-      </p>
+        <a href="#/forgot-password">忘记密码？</a>
+      </p> -->
     </div>
   </ion-content>
 </ion-view>

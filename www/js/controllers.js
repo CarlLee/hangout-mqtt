@@ -125,7 +125,7 @@ angular.module('starter.controllers', ['ionic'])
     }
     reader.readAsDataURL(file);
   }
-  $ionicPopover.fromTemplateUrl("/templates/chat-popover.html", {
+  $ionicPopover.fromTemplateUrl("templates/chat-popover.html", {
     scope: $scope
   }).then(function(popover){
     $scope.popover = popover;
@@ -240,7 +240,7 @@ angular.module('starter.controllers', ['ionic'])
 .controller('LgCtrl', function($scope, $state) {
     $scope.signIn = function(user) {
     console.log('Sign-In', user);
-    localStorage['face']='/img/avatars_0'+Math.floor(9*Math.random()+1)+'.png';
+    localStorage['face']='img/avatars_0'+Math.floor(9*Math.random()+1)+'.png';
     localStorage['nickname']=user.username;
     $state.go('map');
   };
